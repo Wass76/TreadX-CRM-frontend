@@ -157,10 +157,10 @@ const LoginPage = () => {
             Demo Credentials:
           </p>
           <p style={{ margin: '0 0 4px', fontSize: '12px', fontFamily: 'monospace', color: '#6b7280' }}>
-            Email: admin@treadx.com
+            Email: admin@gmail.com
           </p>
           <p style={{ margin: 0, fontSize: '12px', fontFamily: 'monospace', color: '#6b7280' }}>
-            Password: admin123
+            Password: Wassem7676.tn
           </p>
         </div>
         
