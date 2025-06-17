@@ -18,11 +18,11 @@ This guide explains how to deploy the TreadX CRM application using Docker.
    
    # Or using Docker directly
    docker build -t treadx-crm .
-   docker run -d -p 80:80 --name treadx-crm treadx-crm
+   docker run -d -p 3000:80 --name treadx-crm treadx-crm
    ```
 
 2. **Access the application:**
-   - Open your browser and navigate to `http://localhost` or `http://your-server-ip`
+   - Open your browser and navigate to `http://localhost:3000` or `http://your-server-ip:3000`
 
 ### Development Deployment
 
@@ -55,7 +55,7 @@ docker build -f Dockerfile.dev -t treadx-crm-dev .
 
 ```bash
 # Run production container
-docker run -d -p 80:80 --name treadx-crm-prod treadx-crm
+docker run -d -p 3000:80 --name treadx-crm-prod treadx-crm
 
 # Run development container with volume mounting
 docker run -d -p 5173:5173 -v $(pwd):/app --name treadx-crm-dev treadx-crm-dev
@@ -135,7 +135,7 @@ server {
     server_name your-domain.com;
     
     location / {
-        proxy_pass http://localhost:80;
+        proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -175,7 +175,7 @@ VITE_APP_NAME=TreadX CRM
 ## Health Checks
 
 The application includes a health check endpoint:
-- URL: `http://your-domain.com/health`
+- URL: `http://your-domain.com:3000/health`
 - Returns: `healthy` with status 200
 
 ## Troubleshooting
@@ -184,8 +184,12 @@ The application includes a health check endpoint:
 
 1. **Port already in use:**
    ```bash
-   # Check what's using the port
-   sudo netstat -tulpn | grep :80
+   # Check what's using the port (Windows PowerShell)
+   .\check-ports.ps1
+   
+   # Or manually check
+   netstat -ano | findstr :3000
+   netstat -ano | findstr :80
    
    # Kill the process or change the port in docker-compose.yml
    ```
@@ -214,6 +218,20 @@ The application includes a health check endpoint:
    # Check container status
    docker ps -a
    ```
+
+### Port Configuration
+
+If you need to use different ports, modify the `docker-compose.yml` file:
+
+```yaml
+# For production (change 3000 to your preferred port)
+ports:
+  - "8080:80"  # Maps host port 8080 to container port 80
+
+# For development (change 5173 to your preferred port)
+ports:
+  - "3001:5173"  # Maps host port 3001 to container port 5173
+```
 
 ### Performance Optimization
 
